@@ -130,7 +130,7 @@
     const filter = button.dataset.filter;
     let visible = 0;
     cards.forEach(card => {
-      const show = filter === "all" || card.dataset.categories.split(/\\s+/).includes(filter);
+      const show = filter === "all" || card.dataset.categories.split(/\s+/).includes(filter);
       card.hidden = !show;
       if (show) visible++;
     });
