@@ -1,10 +1,10 @@
 # Mohamed Abulaila Portfolio
 
-Responsive personal portfolio for GitHub Pages, built as a single static HTML page.
+Responsive personal portfolio for GitHub Pages, with a landing page and separate full-length case studies.
 
 ## Publish
 
-Create a public GitHub repository named `mohamed-abulaila-portfolio`, upload `index.html` to its root, then enable **Settings → Pages → Deploy from a branch → main → /(root)**. The live page will be available at `https://bioabolila.github.io/mohamed-abulaila-portfolio/` after GitHub finishes publishing.
+This site is published from the public `bioabolila/portfolio` repository using GitHub Pages.
 
-The portfolio includes responsive styling, animated 3D CSS visuals, reduced-motion support, keyboard-accessible case-study dialogs, and email, LinkedIn, and GitHub links. Google Fonts load online with system-font fallbacks.
+The portfolio includes responsive styling, animated 3D CSS visuals, reduced-motion support, eight standalone case study pages, and email, LinkedIn, and GitHub links. Graphs use reported results or clearly marked planning targets; no results are invented. Google Fonts load online with system-font fallbacks.
 
