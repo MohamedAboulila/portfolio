@@ -61,7 +61,7 @@
 .contact-row{position:relative;z-index:1}
 @keyframes system-orbit{to{transform:rotateX(66deg) rotateZ(336deg)}}
 @media(max-width:700px){.nav{height:auto;min-height:66px;gap:14px;padding-top:12px;padding-bottom:12px;align-items:flex-start}.navlinks{flex-wrap:wrap;justify-content:flex-end;gap:8px 13px}.hero-mark{width:min(100%,230px);height:205px}.results-strip{grid-template-columns:repeat(2,1fr);padding:0 18px}.results-strip>div{min-height:78px;padding:13px}.work-controls{align-items:flex-start;flex-direction:column;gap:10px}.work-filters{gap:6px}.work-filter{padding:7px 10px}.project{min-height:0}.project-highlight{min-height:58px}.system-node{font-size:7px}}
-@media(prefers-reduced-motion:reduce){.orbit-a,.orbit-b{animation:none!important}.project,.work-filter{transition:none!important}.project:hover{transform:none}.project:after{display:none}}
+@media(prefers-reduced-motion:reduce){.orbit-a,.orbit-b{animation:none!important}.project,.work-filter{transition:none!important}.project:hover{transform:perspective(1000px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y))}.project:after{display:none}}
 
   .project[hidden]{display:none!important}
   </style>
@@ -129,15 +129,16 @@
 <script>
 (() => {
   const cards = [...document.querySelectorAll(".project[data-categories]")];
-  const supportsTilt = window.matchMedia("(pointer: fine)").matches && !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const supportsTilt = window.matchMedia("(pointer: fine)").matches;
+  const tiltRange = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 3.5 : 9;
   if (supportsTilt) cards.forEach(card => {
     card.addEventListener("pointermove", event => {
       if (event.pointerType === "touch") return;
       const rect = card.getBoundingClientRect();
       const x = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
       const y = Math.max(0, Math.min(1, (event.clientY - rect.top) / rect.height));
-      card.style.setProperty("--tilt-x", ((0.5 - y) * 9).toFixed(2) + "deg");
-      card.style.setProperty("--tilt-y", ((x - 0.5) * 9).toFixed(2) + "deg");
+      card.style.setProperty("--tilt-x", ((0.5 - y) * tiltRange).toFixed(2) + "deg");
+      card.style.setProperty("--tilt-y", ((x - 0.5) * tiltRange).toFixed(2) + "deg");
       card.style.setProperty("--pointer-x", (x * 100).toFixed(1) + "%");
       card.style.setProperty("--pointer-y", (y * 100).toFixed(1) + "%");
     });
