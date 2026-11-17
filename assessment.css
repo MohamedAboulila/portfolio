@@ -18,3 +18,22 @@
 .assessment-option[aria-pressed=true] .assessment-option-letter{background:var(--green);border-color:var(--green);color:#fff}
 @media(max-width:760px){.assessment-options .assessment-option{grid-template-columns:32px minmax(0,1fr) 16px;gap:12px;padding:15px 13px}.assessment-option-copy{font-size:13px}}
 @media(prefers-reduced-motion:reduce){.assessment-option-arrow{transition:none}}
+
+/* Give the generated six-area profile a clear, comparable score display. */
+.assessment-score-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.assessment-score-card{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:11px 15px;align-items:center;padding:22px;background:linear-gradient(145deg,#fff 0%,#fbfaf6 72%,#edf1e9 100%);border:1px solid var(--line);border-top:2px solid var(--green)}
+.assessment-score-card-top{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.assessment-score-card .assessment-result-label{font:9px var(--mono);letter-spacing:.1em;color:var(--green)}
+.assessment-score-card .assessment-score-state{font:10px var(--mono);color:var(--muted);text-align:right}
+.assessment-score-card h3{grid-column:1/2;margin:0;font-size:24px;line-height:1.05}
+.assessment-score-number{grid-column:2/3;grid-row:2/3;color:var(--green);font:500 28px/1 var(--serif);white-space:nowrap}
+.assessment-score-rule{grid-column:1/-1;height:7px;background:#e3e8df;border-radius:99px;overflow:hidden}
+.assessment-score-rule i{display:block;height:100%;background:linear-gradient(90deg,var(--green),#91ac78);border-radius:inherit;transition:width .7s cubic-bezier(.2,.7,.2,1)}
+.assessment-score-rule[aria-label]{font-size:0}
+.assessment-result-highlights article{border-left:2px solid var(--green)}
+.assessment-overview{transform-style:preserve-3d;perspective:900px}
+.assessment-overview-mark,.assessment-overview>p,.assessment-overview-foot{position:relative;z-index:1}
+.assessment-overview:after{animation:assessment-orbit 28s linear infinite}
+@keyframes assessment-orbit{to{transform:rotate(360deg)}}
+@media(max-width:760px){.assessment-score-grid{grid-template-columns:1fr}.assessment-score-card{padding:19px}.assessment-result-section{padding:54px 0}}
+@media(prefers-reduced-motion:reduce){.assessment-overview:after{animation:none}.assessment-score-rule i{transition:none}}
