@@ -79,7 +79,7 @@
     filters.forEach(item => item.setAttribute("aria-pressed", String(item === button)));
     const before = new Map(cards.map(card => [card, card.getBoundingClientRect()]));
     cards.forEach(card => {
-      const show = filter === "all" || card.dataset.categories.split(/\\s+/).includes(filter);
+      const show = filter === "all" || card.dataset.categories.split(" ").filter(Boolean).includes(filter);
       card.hidden = !show;
       card.removeAttribute("data-flip");
     });
