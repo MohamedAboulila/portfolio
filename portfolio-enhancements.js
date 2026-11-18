@@ -46,7 +46,8 @@
       const p = Math.min((now - start) / duration, 1), eased = 1 - Math.pow(1 - p, 4);
       const value = target * eased;
       const locale = document.documentElement.lang === "ar" ? "ar-EG" : "en-US";\n      const formatted = value.toLocaleString(locale, {minimumFractionDigits:decimals, maximumFractionDigits:decimals});
-      el.textContent = prefix + formatted + suffix;
+      const shownSuffix = locale === "ar-EG" ? suffix.replace(/%/g,"٪") : suffix;
+      el.textContent = prefix + formatted + shownSuffix;
       if (p < 1) requestAnimationFrame(tick);
     };
     requestAnimationFrame(tick);
