@@ -74,24 +74,25 @@
   });
   const filters = [...document.querySelectorAll(".work-filter")], count = document.querySelector("#work-count");
   filters.forEach(button => button.addEventListener("click", () => {
-    const filter = button.dataset.filter, before = new Map(cards.map(card => [card, card.getBoundingClientRect()]));
+    const filter = button.dataset.filter;
+    // Update the selected state first so the control responds even if an animation fails.
+    filters.forEach(item => item.setAttribute("aria-pressed", String(item === button)));
+    const before = new Map(cards.map(card => [card, card.getBoundingClientRect()]));
     cards.forEach(card => {
-      const show = filter === "all" || card.dataset.categories.split(/\s+/).includes(filter);
+      const show = filter === "all" || card.dataset.categories.split(/\\s+/).includes(filter);
       card.hidden = !show;
       card.removeAttribute("data-flip");
     });
-    // Force layout, then animate newly visible cards into their new grid positions.
     cards.forEach(card => {
       if (card.hidden) return;
       const old = before.get(card), next = card.getBoundingClientRect();
-      if (old && !reduce) {
+      if (old && !reduce && typeof card.animate === "function") {
         const dx = old.left - next.left, dy = old.top - next.top;
-        if (dx || dy) { card.animate([{transform:"translate(" + dx + "px," + dy + "px)"},{transform:"translate(0,0)"}],{duration:340,easing:"cubic-bezier(.2,.75,.25,1)"}); }
+        if (dx || dy) card.animate([{transform:"translate(" + dx + "px," + dy + "px)"},{transform:"translate(0,0)"}],{duration:340,easing:"cubic-bezier(.2,.75,.25,1)"});
       }
       card.dataset.flip = "entering";
       setTimeout(() => card.removeAttribute("data-flip"), 320);
     });
-    buttons.forEach(item => item.setAttribute("aria-pressed", String(item === button)));
     if (count) count.textContent = cards.filter(card => !card.hidden).length + " projects";
   }));
 

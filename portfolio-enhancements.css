@@ -87,3 +87,8 @@ body[data-theme="dark"] .assessment-page .assessment-progress-track{background:#
   .results-strip>div:nth-last-child(-n+2){border-bottom:0}
   .results-strip>div:last-child:nth-child(odd){grid-column:auto!important;text-align:left;align-items:stretch;border-right:1px solid var(--line)}
 }
+
+/* Keep the homepage hero focused on the headline. */
+.hero{grid-template-columns:minmax(0,1fr);gap:0;align-items:start}
+.hero>div:first-child{max-width:1000px}
+body[data-theme="dark"] .work-filter[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:#fff}
