@@ -76,7 +76,7 @@
     const count=document.querySelector("#work-count");
     if(count){
       const number=active?new Intl.NumberFormat("ar-EG").format(visibleProjects):String(visibleProjects);
-      const noun=active?(visibleProjects===1?"مشروع واحد":visibleProjects===2?"مشروعان":visibleProjects<11?"مشروعات":"مشروعًا"):(visibleProjects===1?" project":" projects");
+      const noun=active?(visibleProjects===1?"مشروع واحد":visibleProjects===2?"مشروعان":visibleProjects<11?"مشروعات":"مشروعًا"):(visibleProjects===1?"project":"projects");
       count.textContent=number+" "+noun;
     }
     document.querySelectorAll(".language-toggle").forEach(button=>{
