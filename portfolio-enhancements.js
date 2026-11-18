@@ -8,7 +8,9 @@
       const dark = theme === "dark";
       button.setAttribute("aria-label", dark ? "Switch to light mode" : "Switch to dark mode");
       const label = button.querySelector(".theme-toggle-label");
-      if (label) label.textContent = dark ? "Light" : "Dark";
+      const isArabic = (() => { try { return localStorage.getItem("portfolio-language") === "ar"; } catch { return false; } })();
+      if (label) label.textContent = isArabic ? (dark ? "فاتح" : "داكن") : (dark ? "Light" : "Dark");
+      if (isArabic) button.setAttribute("aria-label", dark ? "التبديل إلى الوضع الفاتح" : "التبديل إلى الوضع الداكن");
       const icon = button.querySelector("[aria-hidden=true]");
       if (icon) icon.textContent = dark ? "☼" : "◐";
     });
