@@ -95,7 +95,14 @@
       card.dataset.flip = "entering";
       setTimeout(() => card.removeAttribute("data-flip"), 320);
     });
-    if (count) count.textContent = cards.filter(card => !card.hidden).length + " projects";
+    if (count) {
+      const visible = cards.filter(card => !card.hidden).length;
+      const arabic = (() => { try { return localStorage.getItem("portfolio-language") === "ar"; } catch { return false; } })();
+      if (arabic) {
+        const noun = visible === 1 ? "مشروع واحد" : visible === 2 ? "مشروعان" : visible < 11 ? "مشروعات" : "مشروعًا";
+        count.textContent = new Intl.NumberFormat("ar-EG").format(visible) + " " + noun;
+      } else count.textContent = visible + (visible === 1 ? " project" : " projects");
+    }
   }));
 
   // Sticky navigation and section highlighting.
