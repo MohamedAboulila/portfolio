@@ -110,3 +110,18 @@ body[dir="rtl"] .language-toggle{font-family:Tahoma,Arial,sans-serif}
 .language-toggle:focus-visible{outline:2px solid var(--green);outline-offset:3px}
 body[dir="rtl"] .assessment-controls,body[dir="rtl"] .assessment-progress-row,body[dir="rtl"] .assessment-result-top,body[dir="rtl"] .assessment-result-section-head{direction:rtl}
 @media(max-width:700px){body[dir="rtl"] .experience:before{right:auto;left:13px}}
+
+/* Arabic card and comparison alignment */
+body[dir="rtl"] .project-top,body[dir="rtl"] .project-highlight,body[dir="rtl"] .project-foot{direction:rtl;text-align:right}
+body[dir="rtl"] .project-highlight{flex-direction:row;justify-content:flex-start}
+body[dir="rtl"] .project-highlight strong{direction:rtl;unicode-bidi:isolate;letter-spacing:0}
+body[dir="rtl"] .project-highlight span{text-align:right}
+body[dir="rtl"] .project-highlight em{margin-inline-start:auto;margin-inline-end:0;unicode-bidi:isolate}
+body[dir="rtl"] .project-foot:after{content:"افتح دراسة الحالة";margin-inline-start:auto;margin-inline-end:0;direction:rtl}
+body[dir="rtl"] .results-strip strong,body[dir="rtl"] .metric strong,body[dir="rtl"] .outcome-tile strong{direction:ltr;unicode-bidi:isolate}
+body[dir="rtl"] .chart-legend{direction:rtl;justify-content:flex-start}
+body[dir="rtl"] .legend-dot{margin-left:6px;margin-right:0}
+body[dir="rtl"] .bar-group{direction:rtl}
+body[dir="rtl"] .bar-group span{text-align:right}
+body[dir="rtl"] .bar-group b{direction:ltr;unicode-bidi:isolate;text-align:left}
+body[dir="rtl"] .bar-track{direction:ltr}

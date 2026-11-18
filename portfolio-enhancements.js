@@ -45,7 +45,7 @@
     const tick = now => {
       const p = Math.min((now - start) / duration, 1), eased = 1 - Math.pow(1 - p, 4);
       const value = target * eased;
-      const formatted = value.toLocaleString("en-US", {minimumFractionDigits:decimals, maximumFractionDigits:decimals});
+      const locale = document.documentElement.lang === "ar" ? "ar-EG" : "en-US";\n      const formatted = value.toLocaleString(locale, {minimumFractionDigits:decimals, maximumFractionDigits:decimals});
       el.textContent = prefix + formatted + suffix;
       if (p < 1) requestAnimationFrame(tick);
     };
