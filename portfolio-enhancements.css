@@ -53,7 +53,7 @@ html{scroll-behavior:smooth}
 @keyframes ticker-scroll{to{transform:translateX(-18%)}}
 .reveal-ready [data-reveal]{opacity:0;transform:translateY(20px);transition:opacity .65s ease,transform .65s cubic-bezier(.2,.75,.25,1);transition-delay:var(--reveal-delay,0ms)}
 .reveal-ready [data-reveal].is-visible{opacity:1;transform:none}
-body[data-theme="dark"]{--paper:#111b24;--ink:#edf1ee;--muted:#aab7bc;--line:#2d3b43;--green:#55bac0;--lime:#c9ed80;color-scheme:dark;background:var(--paper);color:var(--ink)}
+body[data-theme="dark"]{--paper:#111b24;--ink:#edf1ee;--muted:#aab7bc;--line:#2d3b43;--green:#55bac0;--lime:#e9edfa;color-scheme:dark;background:var(--paper);color:var(--ink)}
 body[data-theme="dark"] .project{background:linear-gradient(145deg,#1c2a34,#15232c);box-shadow:0 10px 28px #0003}
 body[data-theme="dark"] .results-strip>div,body[data-theme="dark"] .metric,body[data-theme="dark"] .assessment-overview,body[data-theme="dark"] .assessment-investigation,body[data-theme="dark"] .assessment-result-highlights article{background:#182630;color:var(--ink)}
 body[data-theme="dark"] .nav,body[data-theme="dark"] .site-header{background:rgba(17,27,36,.9)}
