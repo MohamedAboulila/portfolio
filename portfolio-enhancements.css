@@ -135,3 +135,9 @@ body[dir="rtl"] .bar-track{direction:ltr}
   .experience .exp-date{grid-column:1;grid-row:auto}
   .experience>div:nth-of-type(2){grid-column:1;grid-row:auto}
 }
+
+/* Mohamed's selected visual system */
+:root{--paper:#ffffff;--ink:#394ea2;--muted:#6573a8;--line:#dfe3f2;--green:#000000;--lime:#e9edfa;--serif:'Space Grotesk',Arial,sans-serif;--sans:'Space Grotesk',Arial,sans-serif;--mono:'Space Grotesk',Arial,sans-serif;color-scheme:light}
+body,button,input,select,textarea{font-family:'Space Grotesk',Arial,sans-serif}h1,h2,h3,h4,.serif{font-family:'Space Grotesk',Arial,sans-serif}
+body[dir="rtl"],body[dir="rtl"] button,body[dir="rtl"] input,body[dir="rtl"] select,body[dir="rtl"] textarea{font-family:'Noto Sans Arabic',Tahoma,sans-serif}body[dir="rtl"] h1,body[dir="rtl"] h2,body[dir="rtl"] h3,body[dir="rtl"] h4,body[dir="rtl"] .serif{font-family:'Noto Sans Arabic',Tahoma,sans-serif;letter-spacing:0}
+body[data-theme="dark"]{--paper:#11182f;--ink:#e9edff;--muted:#aeb8df;--line:#303b60;--green:#aab7ff;--lime:#252f52;color-scheme:dark;background:var(--paper);color:var(--ink)}body[data-theme="dark"] .contact{background:#070b17;color:var(--ink)}
