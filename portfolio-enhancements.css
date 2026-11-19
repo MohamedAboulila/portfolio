@@ -141,3 +141,9 @@ body[dir="rtl"] .bar-track{direction:ltr}
 body,button,input,select,textarea{font-family:'Space Grotesk',Arial,sans-serif}h1,h2,h3,h4,.serif{font-family:'Space Grotesk',Arial,sans-serif}
 body[dir="rtl"],body[dir="rtl"] button,body[dir="rtl"] input,body[dir="rtl"] select,body[dir="rtl"] textarea{font-family:'Noto Sans Arabic',Tahoma,sans-serif}body[dir="rtl"] h1,body[dir="rtl"] h2,body[dir="rtl"] h3,body[dir="rtl"] h4,body[dir="rtl"] .serif{font-family:'Noto Sans Arabic',Tahoma,sans-serif;letter-spacing:0}
 body[data-theme="dark"]{--paper:#11182f;--ink:#e9edff;--muted:#aeb8df;--line:#303b60;--green:#aab7ff;--lime:#252f52;color-scheme:dark;background:var(--paper);color:var(--ink)}body[data-theme="dark"] .contact{background:#070b17;color:var(--ink)}
+
+/* Pointer tilt, visible black-accent shadow, and clear hero glyph spacing */
+.hero-title{line-height:1.1!important;overflow:visible;padding-bottom:.12em}
+.hero-title span{overflow:visible;padding-bottom:.06em}
+.project:hover{box-shadow:0 20px 40px color-mix(in srgb,var(--green) 28%,transparent),0 0 0 1px color-mix(in srgb,var(--green) 62%,transparent)!important;border-color:var(--green)!important}
+@media(prefers-reduced-motion:reduce){.project:hover{transform:perspective(1000px) rotateX(var(--tilt-x,0deg)) rotateY(var(--tilt-y,0deg)) translateY(-2px);box-shadow:0 14px 28px color-mix(in srgb,var(--green) 24%,transparent),0 0 0 1px color-mix(in srgb,var(--green) 55%,transparent)!important;border-color:var(--green)!important}}
