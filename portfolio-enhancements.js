@@ -68,7 +68,7 @@
       const rect = card.getBoundingClientRect();
       const x = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
       const y = Math.max(0, Math.min(1, (event.clientY - rect.top) / rect.height));
-      const range = reduce ? 3.5 : 8;
+      const range = reduce ? 6 : 12;
       card.style.setProperty("--tilt-x", ((.5 - y) * range).toFixed(2) + "deg");
       card.style.setProperty("--tilt-y", ((x - .5) * range).toFixed(2) + "deg");
       card.style.setProperty("--pointer-x", (x * 100).toFixed(1) + "%");
