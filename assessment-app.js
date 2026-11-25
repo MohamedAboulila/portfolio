@@ -32,6 +32,7 @@
     { category: "LEARNING LOOP", prompt: "How often does what your team learns directly influence its next growth decision?", answers: ["Almost always", "Often", "Sometimes", "Rarely", "Almost never"] }
   ];
 
+  const backInline = document.querySelector("#back-inline");
   const startButton = document.querySelector("#start-assessment");
   const intro = document.querySelector("#assessment-intro");
   const workspace = document.querySelector("#assessment-workspace");
@@ -55,6 +56,133 @@
   let saving = false;
   let transitioning = false;
   let revisionQuestion = false;
+  let interstitial = 0;
+  const breaks = [5, 10];
+  const interNode = document.createElement("section");
+  interNode.className = "assessment-interstitial";
+  interNode.id = "assessment-interstitial";
+  interNode.hidden = true;
+  (function () {
+    const layoutNode = document.querySelector(".assessment-question-layout");
+    layoutNode.parentNode.insertBefore(interNode, layoutNode.nextSibling);
+  })();
+  const stateWord = value => value >= 4.5 ? "Compounding" : value >= 3.5 ? "Building" : "Reactive";
+  const answerValue = index => answers["Q" + (index + 1)] ? 70 - answers["Q" + (index + 1)].charCodeAt(0) : NaN;
+  const avg = category => {
+    const values = category.questions.map(answerValue).filter(Number.isFinite);
+    return values.reduce((a, b) => a + b, 0) / values.length;
+  };
+  const gapLines = [
+    "Without a clear constraint, every channel and tactic competes for the same budget.",
+    "A plan for the next 6 to 12 months is what lets a team say no to the wrong ideas.",
+    "When priorities are decided ad hoc, the loudest idea tends to win over the best one.",
+    "If new customers arrive unpredictably, forecasting spend and hiring gets hard.",
+    "Not knowing which channels pay back makes it easy to keep funding the wrong ones.",
+    "Leaning on one channel means a single algorithm or price change can stall growth.",
+    "If you can't see where people drop out, fixes become guesses.",
+    "If visitors don't get the offer quickly, more traffic only buys more bounces.",
+    "When low conversion has no routine response, the same problems keep coming back.",
+    "Without knowing why customers stay or leave, retention work is aimed blind.",
+    "Existing customers are usually the cheapest growth, and not working them leaves that on the table."
+  ];
+  function buildInterstitial(round) {
+    const pair = round === 1 ? [categories[0], categories[1]] : [categories[2], categories[3]];
+    const [first, second] = pair;
+    const a = avg(first), b = avg(second);
+    const fa = first.title.toLowerCase(), fb = second.title.toLowerCase();
+    let headline;
+    if (Math.abs(a - b) < 0.5) headline = "Your " + fa + " and " + fb + " are moving at a similar pace.";
+    else if (a > b) headline = first.title + " is ahead of " + fb + ".";
+    else headline = second.title + " is ahead of " + fa + ".";
+    const weaker = a <= b ? first : second;
+    const range = pair.flatMap(category => category.questions);
+    let low = range[0], high = range[0];
+    range.forEach(index => {
+      if (answerValue(index) < answerValue(low)) low = index;
+      if (answerValue(index) > answerValue(high)) high = index;
+    });
+    const said = index => questions[index].answers[answers["Q" + (index + 1)].charCodeAt(0) - 65];
+    const body = first.title + " averages " + a.toFixed(1) + " out of 5 (" + stateWord(a) + "), and " + second.title + " averages " + b.toFixed(1) + " (" + stateWord(b) + ").";
+    const parts = [];
+    if (answerValue(high) > answerValue(low)) {
+      parts.push((answerValue(high) >= 4 ? "What's working" : "Your strongest answer") + ": asked “" + questions[high].prompt + "”, you said “" + said(high) + "”.");
+      parts.push("Your lowest answer: asked “" + questions[low].prompt + "”, you said “" + said(low) + "”.");
+    } else {
+      parts.push("Every answer in this round sat at the same level. Asked “" + questions[low].prompt + "”, you said “" + said(low) + "”.");
+    }
+    const quote = parts.join(" ");
+    const look = answerValue(low) <= 3
+      ? "Why it matters: " + gapLines[low]
+      : "Nothing in this round looks urgent. The weakest spot is still " + weaker.title.toLowerCase() + ": " + weaker.next.charAt(0).toLowerCase() + weaker.next.slice(1);
+    const nextUp = round === 1
+      ? "Next: conversion and retention. These show whether the demand you create turns into customers who stay."
+      : "Last round: analytics and experimentation. These show how far you can trust your numbers and how fast your team learns.";
+    return { headline, body, quote, look, nextUp };
+  }
+  function renderInterstitial(round) {
+    const t = buildInterstitial(round);
+    interNode.replaceChildren();
+    const mk = (tag, cls, text) => { const el = document.createElement(tag); if (cls) el.className = cls; el.textContent = text; return el; };
+    const dots = mk("div", "assessment-inter-dots", "");
+    [1, 2, 3].forEach(n => dots.append(mk("i", n <= round ? "is-done" : (n === round + 1 ? "is-next" : ""), "")));
+    interNode.append(
+      mk("div", "eyebrow", "ROUND " + round + " OF 3 COMPLETE"),
+      dots,
+      mk("h2", "serif assessment-inter-title", t.headline),
+      mk("p", "assessment-inter-body", t.body),
+      mk("p", "assessment-inter-quote", t.quote),
+      mk("p", "assessment-inter-look", t.look),
+      mk("p", "assessment-inter-next", t.nextUp)
+    );
+  }
+  async function showInterstitial(round) {
+    transitioning = true;
+    updateQuestionControls();
+    const layout = document.querySelector(".assessment-question-layout");
+    layout.classList.add("is-leaving");
+    layout.classList.remove("is-back");
+    await new Promise(resolve => window.setTimeout(resolve, 320));
+    layout.hidden = true;
+    layout.classList.remove("is-leaving");
+    renderInterstitial(round);
+    interstitial = round;
+    interNode.hidden = false;
+    interNode.classList.add("is-entering");
+    progressLabel.textContent = "ROUND " + round + " OF 3 COMPLETE";
+    progressFill.style.width = (((questionIndex + 1) / questions.length) * 100) + "%";
+    nextButton.innerHTML = "Continue <span>→</span>";
+    answerHint.textContent = "A first read of your answers. Continue to round " + (round + 1) + ".";
+    window.requestAnimationFrame(() => window.requestAnimationFrame(() => {
+      interNode.classList.remove("is-entering");
+      transitioning = false;
+      updateQuestionControls();
+    }));
+    scrollToQuestion(false);
+  }
+  async function leaveInterstitial(toIndex) {
+    transitioning = true;
+    updateQuestionControls();
+    const back = toIndex <= questionIndex;
+    interNode.classList.add("is-leaving");
+    interNode.classList.toggle("is-back", back);
+    await new Promise(resolve => window.setTimeout(resolve, 320));
+    interNode.hidden = true;
+    interNode.classList.remove("is-leaving");
+    interstitial = 0;
+    const layout = document.querySelector(".assessment-question-layout");
+    layout.hidden = false;
+    layout.classList.add("is-entering");
+    layout.classList.toggle("is-back", back);
+    questionIndex = toIndex;
+    renderQuestion();
+    window.requestAnimationFrame(() => window.requestAnimationFrame(() => {
+      layout.classList.remove("is-entering");
+      transitioning = false;
+      updateQuestionControls();
+    }));
+    questionTitle.focus({ preventScroll: true });
+    scrollToQuestion(false);
+  }
   let autoAdvanceTimer = null;
 
   const localKey = "crescita.assessment.code";
@@ -176,13 +304,21 @@
     return true;
   }
 
+  function scrollToQuestion(instant) {
+    const header = document.querySelector(".site-header");
+    const banner = document.querySelector(".draft-banner");
+    const offset = (header ? header.offsetHeight : 0) + (banner ? banner.offsetHeight : 0) + 12;
+    const top = Math.max(0, workspace.getBoundingClientRect().top + window.scrollY - offset);
+    window.scrollTo({ top, behavior: instant ? "auto" : "smooth" });
+  }
+
   function showQuestionnaire() {
     intro.hidden = true;
     results.hidden = true;
     workspace.hidden = false;
     renderQuestion();
     questionTitle.focus();
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    scrollToQuestion(true);
   }
 
   function renderQuestion() {
@@ -209,6 +345,7 @@
       button.setAttribute("aria-pressed", String(selectedAnswer === value));
       button.innerHTML = '<span class="assessment-option-letter"></span><span class="assessment-option-copy"></span><span class="assessment-option-arrow" aria-hidden="true">↗</span>';
       button.querySelector(".assessment-option-letter").textContent = value;
+      
       button.querySelector(".assessment-option-copy").textContent = answer;
       button.addEventListener("click", () => {
         if (autoAdvanceTimer) window.clearTimeout(autoAdvanceTimer);
@@ -218,27 +355,19 @@
           option.classList.toggle("is-selected", active);
           option.setAttribute("aria-pressed", String(active));
         });
-        if (revisionQuestion) {
-          updateQuestionControls();
-          answerHint.textContent = answers[questionId] === value
-            ? "Answer selected. Continue when you’re ready."
-            : "Answer changed. Continue when you’re ready.";
-          return;
-        }
-        nextButton.disabled = true;
-        answerHint.textContent = "Moving to the next question…";
-        autoAdvanceTimer = window.setTimeout(() => {
-          autoAdvanceTimer = null;
-          if (selectedAnswer === value && !saving && !transitioning && !revisionQuestion) continueAssessment();
-        }, 420);
+        updateQuestionControls();
+        answerHint.textContent = revisionQuestion
+          ? (answers[questionId] === value ? "Answer selected. Continue when you’re ready." : "Answer changed. Continue when you’re ready.")
+          : "Answer selected. Press Continue when you’re ready.";
       });
       optionsNode.append(button);
     });
   }
 
   function updateQuestionControls() {
-    previousButton.disabled = questionIndex === 0 || saving || transitioning;
-    nextButton.disabled = !selectedAnswer || saving || transitioning;
+    previousButton.disabled = (questionIndex === 0 && !interstitial) || saving || transitioning;
+    if (backInline) { backInline.hidden = questionIndex === 0 && !interstitial; backInline.disabled = previousButton.disabled; }
+    nextButton.disabled = (!selectedAnswer && !interstitial) || saving || transitioning;
   }
 
   async function transitionToQuestion(nextIndex) {
@@ -247,8 +376,8 @@
     transitioning = true;
     updateQuestionControls();
     if (layout) {
-      layout.classList.add("is-leaving");
-      await new Promise(resolve => window.setTimeout(resolve, 180));
+      layout.classList.add("is-leaving"); layout.classList.toggle("is-back", nextIndex < questionIndex);
+      await new Promise(resolve => window.setTimeout(resolve, 320));
     }
     questionIndex = nextIndex;
     renderQuestion();
@@ -265,23 +394,46 @@
       updateQuestionControls();
     }
     questionTitle.focus({ preventScroll: true });
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    scrollToQuestion(reduceMotion);
   }
 
-  async function saveCurrentAnswer() {
-    if (!selectedAnswer || !currentAssessment) return;
-    const number = questionIndex + 1;
+  let saveChain = Promise.resolve();
+  let saveFailed = false;
+
+  async function saveAnswerRow(number, value) {
+    if (!value || !currentAssessment) return;
     const result = await client.from("assessment_answers").upsert({
       assessment_id: currentAssessment.id,
       question_id: "Q" + number,
-      answer: selectedAnswer,
+      answer: value,
       answered_at: new Date().toISOString()
     }, { onConflict: "assessment_id,question_id" });
     if (result.error) throw result.error;
-    answers["Q" + number] = selectedAnswer;
     const updateResult = await client.from("assessments")
       .update({ current_question: Math.min(15, number + 1) })
       .eq("id", currentAssessment.id);
     if (updateResult.error) throw updateResult.error;
+  }
+
+  // Save in the background so the next question appears straight away.
+  function queueSave(number, value) {
+    answers["Q" + number] = value;
+    saveChain = saveChain.then(() => saveAnswerRow(number, value)).catch(() => { saveFailed = true; });
+  }
+
+  // Before finishing, wait for pending saves and write every answer once more so nothing is lost.
+  async function saveAllAnswers() {
+    await saveChain;
+    const rows = Object.entries(answers).map(([questionId, letter]) => ({
+      assessment_id: currentAssessment.id,
+      question_id: questionId,
+      answer: letter,
+      answered_at: new Date().toISOString()
+    }));
+    const result = await client.from("assessment_answers").upsert(rows, { onConflict: "assessment_id,question_id" });
+    if (result.error) throw result.error;
+    saveFailed = false;
   }
 
   function scoresFromAnswers() {
@@ -312,7 +464,8 @@
     nextButton.disabled = true;
     setError("");
     try {
-      await saveCurrentAnswer();
+      answers["Q" + (questionIndex + 1)] = selectedAnswer;
+      await saveAllAnswers();
       const scores = scoresFromAnswers();
       if (scores.some(item => !Number.isFinite(item.score))) throw new Error("Some answers are missing. Please review the assessment and try again.");
       const signals = buildSignals(scores);
@@ -452,8 +605,10 @@
     sessionStorageAdapter.setItem(localKey, currentAssessment.assessment_id);
     recordEvent("result_viewed", { assessment_version: ASSESSMENT_VERSION });
     document.querySelector("#result-profile").focus();
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    scrollToQuestion(true);
   }
+
+
 
   async function copyAssessmentCode() {
     const code = currentAssessment?.assessment_id || "";
@@ -491,6 +646,11 @@
   });
 
   async function continueAssessment() {
+    if (interstitial) {
+      if (saving || transitioning) return;
+      await leaveInterstitial(questionIndex + 1);
+      return;
+    }
     if (!selectedAnswer || saving) return;
     if (autoAdvanceTimer) {
       window.clearTimeout(autoAdvanceTimer);
@@ -501,10 +661,14 @@
     setError("");
     try {
       if (questionIndex === questions.length - 1) {
+        answerHint.textContent = "Building your profile…";
+        const lay = document.querySelector(".assessment-question-layout");
+        if (lay) lay.classList.add("is-finishing");
         await finishAssessment();
       } else {
-        await saveCurrentAnswer();
-        await transitionToQuestion(questionIndex + 1);
+        queueSave(questionIndex + 1, selectedAnswer);
+        if (breaks.includes(questionIndex)) await showInterstitial(breaks.indexOf(questionIndex) + 1);
+        else await transitionToQuestion(questionIndex + 1);
       }
     } catch (error) {
       setError(error.message || "We couldn’t save that answer. Check your connection and try again.");
@@ -518,7 +682,14 @@
 
   nextButton.addEventListener("click", continueAssessment);
 
+  if (backInline) backInline.addEventListener("click", () => previousButton.click());
+
   previousButton.addEventListener("click", async () => {
+    if (interstitial) {
+      if (saving || transitioning) return;
+      await leaveInterstitial(questionIndex);
+      return;
+    }
     if (questionIndex === 0 || saving) return;
     if (autoAdvanceTimer) {
       window.clearTimeout(autoAdvanceTimer);
