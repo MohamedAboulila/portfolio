@@ -58,3 +58,13 @@
 @media(max-width:720px){.assessment-lead{max-width:none}.assessment-progress-row{flex-wrap:wrap;gap:10px}.assessment-lead .button{justify-self:stretch}}
 
 .draft-banner{background:#111;color:#fff;text-align:center;font:600 12px/1.4 system-ui,sans-serif;letter-spacing:.06em;padding:8px 12px;position:sticky;top:0;z-index:50}
+
+.assessment-question-layout{transition:opacity .32s ease,transform .32s cubic-bezier(.4,0,.2,1),filter .32s ease}
+.assessment-question-layout.is-leaving{opacity:0;transform:translateX(-48px);filter:blur(3px)}
+.assessment-question-layout.is-leaving.is-back{transform:translateX(48px)}
+.assessment-question-layout.is-entering{opacity:0;transform:translateX(48px);filter:blur(3px);transition:none}
+.assessment-question-layout.is-entering.is-back{transform:translateX(-48px)}
+.assessment-question-layout.is-finishing{opacity:.45;transform:scale(.985)}
+.assessment-options button{animation:draftOptIn .4s ease both}
+.assessment-options button:nth-child(2){animation-delay:.04s}.assessment-options button:nth-child(3){animation-delay:.08s}.assessment-options button:nth-child(4){animation-delay:.12s}.assessment-options button:nth-child(5){animation-delay:.16s}
+@keyframes draftOptIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
