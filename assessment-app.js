@@ -611,6 +611,24 @@
 
   let leadContext = null;
 
+  function checkEmail(email, form) {
+    if (!/^[^\s@]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*\.[a-z]{2,24}$/i.test(email)) return "Please enter a valid email address.";
+    const at = email.lastIndexOf("@");
+    const domain = email.slice(at + 1).toLowerCase();
+    const tld = domain.slice(domain.lastIndexOf(".") + 1);
+    const tldFix = {con:"com",cmo:"com",ocm:"com",comm:"com",cim:"com",vom:"com",xom:"com",clm:"com",coom:"com",ner:"net",nett:"net",ogr:"org",orgg:"org"};
+    if (tldFix[tld]) return "That ending looks like a typo. Did you mean ." + tldFix[tld] + "?";
+    const typos = {"gmial.com":"gmail.com","gmai.com":"gmail.com","gamil.com":"gmail.com","gnail.com":"gmail.com","gmail.co":"gmail.com","gmaill.com":"gmail.com","gmail.cm":"gmail.com","gmali.com":"gmail.com","outlok.com":"outlook.com","outllok.com":"outlook.com","outlook.co":"outlook.com","outloook.com":"outlook.com","hotmial.com":"hotmail.com","hotmal.com":"hotmail.com","hotmail.co":"hotmail.com","homail.com":"hotmail.com","yaho.com":"yahoo.com","yahooo.com":"yahoo.com","yahoo.co":"yahoo.com","yhoo.com":"yahoo.com","iclod.com":"icloud.com","icloud.co":"icloud.com","icoud.com":"icloud.com"};
+    if (typos[domain]) {
+      const suggestion = email.slice(0, at + 1) + typos[domain];
+      if (form.dataset.confirmedEmail !== email) {
+        form.dataset.confirmedEmail = email;
+        return "Did you mean " + suggestion + "? Fix it, or press send again if " + email + " is right.";
+      }
+    }
+    return "";
+  }
+
   function setupLeadForm() {
     const form = document.querySelector("#lead-form");
     if (!form || form.dataset.ready) return;
@@ -624,7 +642,8 @@
       const email = form.email.value.trim();
       const note = form.note.value.trim();
       if (!name) { status.textContent = "Please add your name."; form.name.focus(); return; }
-      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { status.textContent = "Please enter a valid email address."; form.email.focus(); return; }
+      const emailProblem = checkEmail(email, form);
+      if (emailProblem) { status.textContent = emailProblem; form.email.focus(); return; }
       status.textContent = "";
       submit.disabled = true;
       submit.firstChild.textContent = "Sending… ";
