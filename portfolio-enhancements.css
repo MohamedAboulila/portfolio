@@ -162,3 +162,16 @@ body[data-theme="dark"]{--paper:#11182f;--ink:#e9edff;--muted:#aeb8df;--line:#30
 .next-step p{margin:0;color:var(--muted);font-size:14px;max-width:520px}
 body[data-theme="dark"] .next-step{background:var(--paper)}
 @media(max-width:700px){.cta-row{gap:10px}.btn{padding:13px 18px;font-size:13px}.next-step{flex-direction:column;align-items:flex-start;padding:24px 22px}}
+
+/* Align experience rows: fixed date column so every title starts at the same position. */
+.experience{grid-template-columns:200px minmax(0,1fr)}
+@media(max-width:850px){.experience{grid-template-columns:165px minmax(0,1fr)}}
+@media(max-width:700px){.experience{grid-template-columns:minmax(0,1fr)}}
+
+/* Experience column placement: content sits in column 2 of the 2-column rows (overrides the old timeline's column 3), and stacks in the single mobile column. */
+@media(min-width:701px){.experience>div:nth-of-type(2){grid-column:2}}
+@media(max-width:700px){.experience>div:nth-of-type(2){grid-column:1}}
+
+/* Light-mode card depth: visible resting shadow and a stronger hover lift in the site ink tone; dark mode keeps its existing shadow. */
+body:not([data-theme="dark"]) .project{box-shadow:0 1px 2px #394ea214,0 12px 32px #394ea217}
+body:not([data-theme="dark"]) .project:hover{box-shadow:0 2px 4px #394ea21a,0 22px 48px #394ea229}
