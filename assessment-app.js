@@ -600,7 +600,8 @@
       article.querySelector("p").textContent = item.next;
       investigations.append(article);
     });
-    document.querySelector("#assessment-booking-link").href = "mailto:Mohamedabolila00@outlook.com?subject=My%20Growth%20Assessment%20Results&body=I%20completed%20my%20growth%20assessment.%20My%20assessment%20ID%20is%3A%20" + encodeURIComponent(currentAssessment.assessment_id);
+    leadContext = { scores: Object.fromEntries(scores.map(item => [item.key, item.score])), profile: signals.profile };
+    setupLeadForm();
     document.querySelector("#copy-assessment-code")?.addEventListener("click", copyAssessmentCode, { once: true });
     sessionStorageAdapter.setItem(localKey, currentAssessment.assessment_id);
     recordEvent("result_viewed", { assessment_version: ASSESSMENT_VERSION });
@@ -608,7 +609,42 @@
     scrollToQuestion(true);
   }
 
+  let leadContext = null;
 
+  function setupLeadForm() {
+    const form = document.querySelector("#lead-form");
+    if (!form || form.dataset.ready) return;
+    form.dataset.ready = "1";
+    const status = document.querySelector("#lead-status");
+    const submit = form.querySelector("button[type=submit]");
+    form.addEventListener("submit", async event => {
+      event.preventDefault();
+      if (form.website.value) return;
+      const name = form.name.value.trim();
+      const email = form.email.value.trim();
+      const note = form.note.value.trim();
+      if (!name) { status.textContent = "Please add your name."; form.name.focus(); return; }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { status.textContent = "Please enter a valid email address."; form.email.focus(); return; }
+      status.textContent = "";
+      submit.disabled = true;
+      submit.firstChild.textContent = "Sending… ";
+      try {
+        const result = await client.from("assessment_events").insert({
+          assessment_id: currentAssessment.id,
+          event_type: "lead_submitted",
+          metadata: { name, email, note: note || null, assessment_code: currentAssessment.assessment_id, profile: leadContext && leadContext.profile, scores: leadContext && leadContext.scores }
+        });
+        if (result.error) throw result.error;
+        form.hidden = true;
+        document.querySelector("#lead-thanks-name").textContent = name.split(" ")[0];
+        document.querySelector("#lead-thanks").hidden = false;
+      } catch (error) {
+        status.textContent = "We couldn’t send that. Check your connection and try again, or email me directly.";
+        submit.disabled = false;
+        submit.firstChild.textContent = "Send my results ";
+      }
+    });
+  }
 
   async function copyAssessmentCode() {
     const code = currentAssessment?.assessment_id || "";
