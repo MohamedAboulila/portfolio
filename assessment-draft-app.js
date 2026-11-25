@@ -216,13 +216,21 @@
     return true;
   }
 
+  function scrollToQuestion(instant) {
+    const header = document.querySelector(".site-header");
+    const banner = document.querySelector(".draft-banner");
+    const offset = (header ? header.offsetHeight : 0) + (banner ? banner.offsetHeight : 0) + 12;
+    const top = Math.max(0, workspace.getBoundingClientRect().top + window.scrollY - offset);
+    window.scrollTo({ top, behavior: instant ? "auto" : "smooth" });
+  }
+
   function showQuestionnaire() {
     intro.hidden = true;
     results.hidden = true;
     workspace.hidden = false;
     renderQuestion();
     questionTitle.focus();
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    scrollToQuestion(true);
   }
 
   function renderQuestion() {
@@ -299,7 +307,7 @@
     }
     questionTitle.focus({ preventScroll: true });
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+    scrollToQuestion(reduceMotion);
   }
 
   let saveChain = Promise.resolve();
@@ -510,7 +518,7 @@
     sessionStorageAdapter.setItem(localKey, currentAssessment.assessment_id);
     recordEvent("result_viewed", { assessment_version: ASSESSMENT_VERSION });
     document.querySelector("#result-profile").focus();
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    scrollToQuestion(true);
   }
 
   let leadContext = null;
