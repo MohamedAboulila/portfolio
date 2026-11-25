@@ -249,7 +249,7 @@
       button.setAttribute("aria-pressed", String(selectedAnswer === value));
       button.innerHTML = '<span class="assessment-option-letter"></span><span class="assessment-option-copy"></span><span class="assessment-option-arrow" aria-hidden="true">↗</span>';
       button.querySelector(".assessment-option-letter").textContent = value;
-      if (selectedAnswer === value) button.querySelector(".assessment-option-arrow").textContent = "✓";
+      
       button.querySelector(".assessment-option-copy").textContent = answer;
       button.addEventListener("click", () => {
         if (autoAdvanceTimer) window.clearTimeout(autoAdvanceTimer);
@@ -258,8 +258,6 @@
           const active = option === button;
           option.classList.toggle("is-selected", active);
           option.setAttribute("aria-pressed", String(active));
-          const mark = option.querySelector(".assessment-option-arrow");
-          if (mark) mark.textContent = active ? "✓" : "↗";
         });
         updateQuestionControls();
         answerHint.textContent = revisionQuestion
