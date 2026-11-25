@@ -89,3 +89,8 @@
 .assessment-workspace #next-question{width:min(240px,60vw);min-width:0;height:52px;min-height:0;margin:0;box-sizing:border-box}
 .assessment-workspace #next-question,.assessment-workspace #next-question:hover{transform:none!important;transition:opacity .15s}
 .assessment-workspace .assessment-controls *{transform:none}
+/* b3: align bar contents with page container on wide screens */
+.assessment-workspace .assessment-controls{padding-left:calc(max(0px,(100% - 1440px)/2) + clamp(22px,7vw,110px));padding-right:calc(max(0px,(100% - 1440px)/2) + clamp(22px,7vw,110px))}
+@media(min-width:900px){.assessment-workspace #next-question{width:260px}.assessment-workspace #answer-hint{font-size:13px}}
+.assessment-workspace .assessment-controls{height:calc(100px + env(safe-area-inset-bottom))}
+.assessment-workspace{padding-bottom:calc(190px + env(safe-area-inset-bottom))!important}
