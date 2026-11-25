@@ -15,7 +15,7 @@
       if (icon) icon.textContent = dark ? "☼" : "◐";
     });
   };
-  setTheme(saved || (systemDark ? "dark" : "light"));
+  setTheme(saved || "light");
   document.querySelectorAll(".theme-toggle").forEach(button => button.addEventListener("click", () => {
     const next = document.body.dataset.theme === "dark" ? "light" : "dark";
     setTheme(next);
