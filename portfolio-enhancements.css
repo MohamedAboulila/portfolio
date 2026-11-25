@@ -175,3 +175,24 @@ body[data-theme="dark"] .next-step{background:var(--paper)}
 /* Light-mode card depth: visible resting shadow and a stronger hover lift in the site ink tone; dark mode keeps its existing shadow. */
 body:not([data-theme="dark"]) .project{box-shadow:0 1px 2px #394ea214,0 12px 32px #394ea217}
 body:not([data-theme="dark"]) .project:hover{box-shadow:0 2px 4px #394ea21a,0 22px 48px #394ea229}
+
+/* Copy revision 2026-11-25: story-spine blocks on case study pages */
+.lesson-block{border:1px solid var(--line);border-inline-start:3px solid var(--green);border-radius:3px;padding:22px 24px;margin:22px 0;background:#ffffff}
+.lesson-block .lesson-label{font:10px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.lesson-block p{margin:0;color:var(--ink);max-width:720px;font-size:17px;line-height:1.6}
+.steal-block{background:#e9edfa;border-color:#dfe3f2}
+.case-quote{border:1px solid var(--line);border-radius:3px;padding:26px 28px;margin:22px 0 32px;background:linear-gradient(145deg,#fff 0%,#ffffff 67%,#f5f6fc 100%);box-shadow:0 16px 38px #394ea208}
+.case-quote blockquote{margin:0;font:500 clamp(16px,1.9vw,19px)/1.7 var(--serif);color:var(--ink);letter-spacing:-.01em}
+.case-quote blockquote p{margin:0}
+.case-quote blockquote p+p{margin-top:12px}
+.case-quote figcaption{margin-top:16px;font:11px var(--mono);color:var(--muted)}
+body[data-theme="dark"] .lesson-block{background:#182630}
+body[data-theme="dark"] .steal-block{background:#1c2a34}
+body[data-theme="dark"] .case-quote{background:#182630;box-shadow:0 10px 28px #0003}
+body[dir="rtl"] .lesson-block,body[dir="rtl"] .case-quote{text-align:right}
+
+/* Dark-mode fixes for case-study visual blocks (steps grid, visual wrapper, outcome tiles) */
+body[data-theme="dark"] .visual{background:#182630;box-shadow:0 10px 28px #0003}
+body[data-theme="dark"] .step{background:#1c2a34}
+body[data-theme="dark"] .step b{color:var(--ink)}
+body[data-theme="dark"] .outcome-tile{background:#1c2a34;border-color:var(--line)}
