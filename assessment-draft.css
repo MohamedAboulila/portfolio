@@ -94,3 +94,19 @@
 @media(min-width:900px){.assessment-workspace #next-question{width:260px}.assessment-workspace #answer-hint{font-size:13px}}
 .assessment-workspace .assessment-controls{height:calc(100px + env(safe-area-inset-bottom))}
 .assessment-workspace{padding-bottom:calc(190px + env(safe-area-inset-bottom))!important}
+
+/* b5: in-between screens */
+.assessment-question-layout[hidden],.assessment-interstitial[hidden]{display:none!important}
+.assessment-interstitial{max-width:760px;margin:0 auto;transition:opacity .32s ease,transform .32s cubic-bezier(.4,0,.2,1),filter .32s ease}
+.assessment-interstitial.is-leaving{opacity:0;transform:translateX(-48px);filter:blur(3px)}
+.assessment-interstitial.is-leaving.is-back{transform:translateX(48px)}
+.assessment-interstitial.is-entering{opacity:0;transform:translateX(48px);filter:blur(3px);transition:none}
+.assessment-inter-dots{display:flex;gap:8px;margin:18px 0 6px}
+.assessment-inter-dots i{width:34px;height:4px;background:var(--line,#ddd);border-radius:2px}
+.assessment-inter-dots i.is-done{background:var(--green,#000)}
+.assessment-inter-dots i.is-next{background:rgba(0,0,0,.28)}
+.assessment-inter-title{font-size:clamp(32px,5vw,54px);line-height:1.08;margin:18px 0 22px}
+.assessment-interstitial p{font-size:clamp(16px,2vw,19px);line-height:1.65;margin:0 0 16px;color:var(--muted,#555)}
+.assessment-inter-quote{padding:16px 18px;border-left:3px solid var(--green,#000);background:rgba(255,255,255,.5);color:var(--ink,#111)!important}
+.assessment-inter-next{margin-top:28px!important;font-weight:600;color:var(--ink,#111)!important}
+@media(prefers-reduced-motion:reduce){.assessment-interstitial{transition:none}}
