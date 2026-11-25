@@ -80,3 +80,12 @@
 .assessment-workspace #next-question{grid-area:next;justify-self:end;min-width:min(240px,60vw);min-height:50px;opacity:1}
 .assessment-workspace #next-question:disabled{opacity:.35}
 .assessment-workspace .assessment-error{position:static}
+
+/* build b3: iOS-safe pinned bar */
+.assessment-workspace{padding-bottom:calc(170px + env(safe-area-inset-bottom))!important}
+.assessment-workspace .assessment-controls{position:fixed;bottom:0;left:0;right:0;width:100%;box-sizing:border-box;background:#f5f3ee;backdrop-filter:none;-webkit-backdrop-filter:none;transform:translateZ(0);-webkit-transform:translateZ(0);height:calc(88px + env(safe-area-inset-bottom));padding-top:10px;padding-bottom:calc(10px + env(safe-area-inset-bottom));grid-template-rows:18px 52px;align-content:start;gap:8px 16px}
+.assessment-workspace #answer-hint{height:18px;line-height:18px;min-height:0;margin:0}
+.assessment-workspace #previous-question{height:52px;margin:0;padding:0 4px}
+.assessment-workspace #next-question{width:min(240px,60vw);min-width:0;height:52px;min-height:0;margin:0;box-sizing:border-box}
+.assessment-workspace #next-question,.assessment-workspace #next-question:hover{transform:none!important;transition:opacity .15s}
+.assessment-workspace .assessment-controls *{transform:none}
