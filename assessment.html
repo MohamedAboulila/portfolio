@@ -17,7 +17,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assessment.css?v=b5">
+<link rel="stylesheet" href="assessment.css?v=b6">
 <link rel="stylesheet" href="portfolio-enhancements.css?v=20261125-copy">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
@@ -117,9 +117,20 @@
         <div>
           <div class="eyebrow">The next move</div>
           <h2 class="serif">Let’s look at your growth system.</h2>
-          <p>I can help you interpret these signals, tell you the first constraint I’d attack, and turn the findings into a focused growth plan. Your assessment ID will be included if you email me.</p>
+          <p>I can help you interpret these signals, tell you the first constraint I’d attack, and turn the findings into a focused growth plan. Leave your details and I will reply with my read of your results.</p>
         </div>
-        <a class="button" id="assessment-booking-link" href="mailto:Mohamedabolila00@outlook.com?subject=My%20Growth%20Assessment">Discuss my results <span>→</span></a>
+        <div class="assessment-lead">
+          <form id="lead-form" novalidate>
+            <label>Name<input name="name" type="text" autocomplete="name" required></label>
+            <label>Email<input name="email" type="email" autocomplete="email" required></label>
+            <label>Anything you want me to know? <em>(optional)</em><textarea name="note" rows="2"></textarea></label>
+            <input class="lead-hp" name="website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true">
+            <button class="button" type="submit">Send my results <span>→</span></button>
+            <p class="lead-status" id="lead-status" role="alert" aria-live="polite"></p>
+            <p class="lead-fine">Your score is sent with your message. I only use your email to reply.</p>
+          </form>
+          <div class="lead-thanks" id="lead-thanks" hidden><h3 class="serif">Thanks, <span id="lead-thanks-name"></span>.</h3><p>I have your results and will reply by email.</p></div>
+        </div>
       </section>
     </div>
   </section>
@@ -135,7 +146,7 @@
 </footer>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
-<script src="assessment-app.js?v=b5"></script>
+<script src="assessment-app.js?v=b6"></script>
 <script src="portfolio-enhancements.js?v=20261119-hover" defer></script>
 <script src="portfolio-ar.js?v=20261125-copy" defer></script>
 </body>
