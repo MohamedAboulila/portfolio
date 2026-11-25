@@ -261,19 +261,10 @@
           const mark = option.querySelector(".assessment-option-arrow");
           if (mark) mark.textContent = active ? "✓" : "↗";
         });
-        if (revisionQuestion) {
-          updateQuestionControls();
-          answerHint.textContent = answers[questionId] === value
-            ? "Answer selected. Continue when you’re ready."
-            : "Answer changed. Continue when you’re ready.";
-          return;
-        }
-        nextButton.disabled = true;
-        answerHint.textContent = questionIndex === questions.length - 1 ? "Building your profile…" : "Moving to the next question…";
-        autoAdvanceTimer = window.setTimeout(() => {
-          autoAdvanceTimer = null;
-          if (selectedAnswer === value && !saving && !transitioning && !revisionQuestion) continueAssessment();
-        }, 350);
+        updateQuestionControls();
+        answerHint.textContent = revisionQuestion
+          ? (answers[questionId] === value ? "Answer selected. Continue when you’re ready." : "Answer changed. Continue when you’re ready.")
+          : "Answer selected. Press Continue when you’re ready.";
       });
       optionsNode.append(button);
     });
@@ -291,8 +282,8 @@
     transitioning = true;
     updateQuestionControls();
     if (layout) {
-      layout.classList.add("is-leaving");
-      await new Promise(resolve => window.setTimeout(resolve, 180));
+      layout.classList.add("is-leaving"); layout.classList.toggle("is-back", nextIndex < questionIndex);
+      await new Promise(resolve => window.setTimeout(resolve, 320));
     }
     questionIndex = nextIndex;
     renderQuestion();
@@ -607,6 +598,9 @@
     setError("");
     try {
       if (questionIndex === questions.length - 1) {
+        answerHint.textContent = "Building your profile…";
+        const lay = document.querySelector(".assessment-question-layout");
+        if (lay) lay.classList.add("is-finishing");
         await finishAssessment();
       } else {
         queueSave(questionIndex + 1, selectedAnswer);
