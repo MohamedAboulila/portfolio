@@ -71,3 +71,12 @@
 .assessment-option-arrow{display:none!important}
 .assessment-option .assessment-option-letter{transition:background .2s,color .2s,border-color .2s,transform .2s}
 .assessment-option.is-selected .assessment-option-letter,.assessment-options button[aria-pressed=true] .assessment-option-letter{background:var(--green,#456b50);border-color:var(--green,#456b50);color:#fff;transform:scale(1.06)}
+
+.assessment-workspace{padding-bottom:150px!important}
+.assessment-workspace .assessment-controls{position:fixed;left:0;right:0;bottom:0;z-index:40;margin:0;padding:12px max(20px,env(safe-area-inset-left)) calc(12px + env(safe-area-inset-bottom)) max(20px,env(safe-area-inset-right));background:rgba(245,243,238,.97);backdrop-filter:blur(10px);border-top:1px solid var(--line,#ddd);display:grid;grid-template-columns:auto 1fr;grid-template-areas:"hint hint" "prev next";align-items:center;gap:8px 16px}
+.assessment-workspace .assessment-control-right{display:contents}
+.assessment-workspace #answer-hint{grid-area:hint;font-size:12px;line-height:1.3;min-height:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:right}
+.assessment-workspace #previous-question{grid-area:prev;white-space:nowrap}
+.assessment-workspace #next-question{grid-area:next;justify-self:end;min-width:min(240px,60vw);min-height:50px;opacity:1}
+.assessment-workspace #next-question:disabled{opacity:.35}
+.assessment-workspace .assessment-error{position:static}
